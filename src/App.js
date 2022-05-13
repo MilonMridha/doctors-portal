@@ -2,9 +2,10 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Appointment from './pages/AppointmentBanner/Appointment';
-import AppointmentBanner from './pages/AppointmentBanner/AppointmentBanner';
+
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
+import SignUp from './pages/Login/SignUp';
 import Navbar from './Shared/Navbar/Navbar';
 
 
@@ -16,7 +17,8 @@ function App() {
         <Route path='/' element={<Home></Home>}></Route>
         <Route path='/about' element={<Home></Home>}></Route>
         <Route path='/login' element={<Login></Login>}></Route>
-        <Route path='appointment' element={<Appointment></Appointment>}></Route>
+        <Route path='/appointment' element={<Appointment></Appointment>}></Route>
+        <Route path='/signup' element={<SignUp></SignUp>}></Route>
       </Routes>
     </div>
   );
