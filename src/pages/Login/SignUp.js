@@ -1,46 +1,51 @@
 import React from 'react';
 import auth from '../../firebase.init'
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useSendEmailVerification, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { useForm } from "react-hook-form";
 import Loading from '../../Shared/Loading';
 import { Link, useNavigate } from 'react-router-dom';
+import useToken from '../../Hooks/UseToken';
 const SignUp = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+    const [sendEmailVerification, sending] = useSendEmailVerification(auth);
+
     const [
         createUserWithEmailAndPassword,
         user,
         loading,
         error,
-      ] = useCreateUserWithEmailAndPassword(auth);
+      ] = useCreateUserWithEmailAndPassword(auth, {sendEmailVerification : true} );
 
       const [updateProfile, updating, updateError] = useUpdateProfile(auth);
       const navigate = useNavigate();
-      
+
+      const [token] = useToken(user || gUser);
 
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const onSubmit = async data => {
-        console.log(data)
+        
         await createUserWithEmailAndPassword(data.email, data.password);
         await updateProfile({displayName: data.name})
-        console.log('update done')
-        navigate('/appointment')
+        console.log('update One')
+        
     };
 
     let signInError;
 
-    if (error || gError){
-        signInError = <p className='text-red-500 mb-1'> <small>{error?.message || gError?.message} </small></p>
+    if (error || gError || updateError){
+        signInError = <p className='text-red-500 mb-1'> <small>{error?.message || gError?.message || updateError?.message} </small></p>
     }
-    if(loading || gLoading){
+    if(loading || gLoading || updating){
         return <Loading></Loading>
     }
 
-    if (user || gUser) {
-        console.log(user || gUser)
+    
+    if(token){
+        navigate('/appointment')
     }
     return (
-        <div className='flex h-screen justify-center items-center'>
+        <div className='flex h-screen justify-center items-center overflow-hidden'>
             <div className="card w-96 bg-base-100 shadow-xl ">
                 <div className="card-body">
                     <h2 className="text-center text-2xl font-bold">Sign Up</h2>

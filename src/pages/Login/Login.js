@@ -1,50 +1,69 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import auth from '../../firebase.init'
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useForm } from "react-hook-form";
 import Loading from '../../Shared/Loading';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import useToken from '../../Hooks/UseToken';
 
 
 
 const Login = () => {
 
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
-    const [signInWithEmailAndPassword,user,loading,error,] = useSignInWithEmailAndPassword(auth);
-      
+    const [signInWithEmailAndPassword, user, loading, error,] = useSignInWithEmailAndPassword(auth);
+    
+    const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
+    const emailRef = useRef('');
+    const resetPassword = async () => {
+        const email = emailRef.current.value;
+
+        if (email) {
+            await sendPasswordResetEmail(email);
+            alert('Sent email');
+        }
+        else {
+            alert('Enter your true email address');
+        }
+
+    }
+
 
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const onSubmit = data => {
-       
+
+
         signInWithEmailAndPassword(data.email, data.password);
     };
-
+        const [token] = useToken(user || gUser)
     const navigate = useNavigate();
     const location = useLocation();
 
+
     const from = location.state?.from?.pathname || '/';
 
-    useEffect(()=>{
-        if (user || gUser) {
+    useEffect(() => {
+        if (token) {
             navigate(from, { replace: true });
         }
-    },[user, gUser, from, navigate]);
+    }, [token, from, navigate]);
+
 
     let signInError;
 
-    if (error || gError){
+    if (error || gError) {
         signInError = <p className='text-red-500 mb-1'> <small>{error?.message || gError?.message} </small></p>
     }
-    if(loading || gLoading){
+    if (loading || gLoading || sending) {
         return <Loading></Loading>
     }
 
-    
+
 
 
     return (
-        <div className='flex h-screen justify-center items-center'>
+        <div className='flex h-screen justify-center items-center overflow-hidden'>
             <div className="card w-96 bg-base-100 shadow-xl ">
                 <div className="card-body">
                     <h2 className="text-center text-2xl font-bold">Login</h2>
@@ -67,6 +86,7 @@ const Login = () => {
                                     }
                                 })}
                                 type="email"
+                                // ref={emailRef}
                                 placeholder="Your Email"
                                 className="input input-bordered w-full max-w-xs"
                             />
@@ -75,7 +95,7 @@ const Login = () => {
                                 {errors.email?.type === 'pattern' && <span className="label-text-alt text-red-500">{errors.email.message}</span>}
                             </label>
                         </div>
-                            
+
                         <div className="form-control w-full max-w-xs">
                             <label className="label">
                                 <span className="label-text">Password</span>
@@ -103,7 +123,9 @@ const Login = () => {
                         {signInError}
                         <input className='btn w-full max-w-xs text-white' type="submit" value="login" />
                     </form>
-                    <small><p>New to Doctor's Portal? <Link className='text-secondary' to='/signup'>Create New Account</Link></p>  </small>           
+                    <small><p className='text-center'>Forgot Password ? <button className='text-secondary' onClick={resetPassword}> Reset password</button></p></small>
+
+                    <small><p className='text-center'>New to Doctor's Portal? <Link className='text-secondary' to='/signup'>Create New Account</Link></p>  </small>
                     <div className="divider">OR</div>
                     <button onClick={() => signInWithGoogle()} className="btn btn-outline btn-accent">Continue with google</button>
                 </div>
