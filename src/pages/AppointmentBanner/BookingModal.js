@@ -23,7 +23,7 @@ const formattedDate = format(date, 'PP');
             patientName:user.displayName,
             phone:event.target.phone.value
         }
-        fetch('http://localhost:5000/booking', {
+        fetch('https://ancient-chamber-96068.herokuapp.com/booking', {
             method: 'POST',
             headers: {
                 'content-type' : 'application/json'

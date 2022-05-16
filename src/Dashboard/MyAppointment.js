@@ -11,7 +11,7 @@ const MyAppointment = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:5000/booking?patient=${user.email}`, {
+        fetch(`https://ancient-chamber-96068.herokuapp.com/booking?patient=${user.email}`, {
             method: 'GET',
             headers: {
                 'authorization': `bearer ${localStorage.getItem('accessToken')}`
@@ -35,8 +35,8 @@ const MyAppointment = () => {
     return (
         <div>
             <h2>My Appointment: {appointment.length}</h2>
-            <div class="overflow-x-auto">
-                <table class="table w-full">
+            <div className="overflow-x-auto">
+                <table className="table w-full">
                     {/* <!-- head --> */}
                     <thead>
                         <tr>
@@ -51,7 +51,7 @@ const MyAppointment = () => {
 
                         {
                             appointment?.map((a, index) =>
-                                <tr>
+                                <tr key={index}>
                                     <th>{index + 1}</th>
                                     <td>{a.patientName}</td>
                                     <td>{a.date}</td>

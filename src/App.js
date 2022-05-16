@@ -15,6 +15,8 @@ import MyAppointment from './Dashboard/MyAppointment';
 import MyReview from './Dashboard/MyReview';
 import MyHistory from './Dashboard/MyHistory';
 import Users from './Dashboard/Users';
+import RequireAdmin from './pages/Login/RequireAdmin';
+import ResetPassword from './pages/Login/ResetPassword';
 
 
 function App() {
@@ -25,6 +27,7 @@ function App() {
         <Route path='/' element={<Home></Home>}></Route>
         <Route path='/about' element={<Home></Home>}></Route>
         <Route path='/login' element={<Login></Login>}></Route>
+        <Route path='/reset' element={<ResetPassword></ResetPassword>}></Route>
         <Route path='/appointment' element={
           <RequireAuth>
             <Appointment></Appointment>
@@ -38,7 +41,7 @@ function App() {
           <Route index element={<MyAppointment></MyAppointment>}></Route>
           <Route path='review' element={<MyReview></MyReview>}></Route>
           <Route path='history' element={<MyHistory></MyHistory>}></Route>
-          <Route path='user' element={<Users></Users>}></Route>
+          <Route path='user' element={<RequireAdmin><Users></Users></RequireAdmin>}></Route>
          
         </Route>
 

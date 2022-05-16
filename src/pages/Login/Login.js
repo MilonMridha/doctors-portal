@@ -14,22 +14,7 @@ const Login = () => {
     const [signInWithEmailAndPassword, user, loading, error,] = useSignInWithEmailAndPassword(auth);
     
     const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
-    const emailRef = useRef('');
-    const resetPassword = async () => {
-        const email = emailRef.current.value;
-
-        if (email) {
-            await sendPasswordResetEmail(email);
-            alert('Sent email');
-        }
-        else {
-            alert('Enter your true email address');
-        }
-
-    }
-
-
-    const { register, formState: { errors }, handleSubmit } = useForm();
+   const { register, formState: { errors }, handleSubmit } = useForm();
 
     const onSubmit = data => {
 
@@ -123,7 +108,7 @@ const Login = () => {
                         {signInError}
                         <input className='btn w-full max-w-xs text-white' type="submit" value="login" />
                     </form>
-                    <small><p className='text-center'>Forgot Password ? <button className='text-secondary' onClick={resetPassword}> Reset password</button></p></small>
+                    <small><p className='text-center'>Forgot Password ? <Link to='/reset' className='text-secondary'> Reset password</Link></p></small>
 
                     <small><p className='text-center'>New to Doctor's Portal? <Link className='text-secondary' to='/signup'>Create New Account</Link></p>  </small>
                     <div className="divider">OR</div>
