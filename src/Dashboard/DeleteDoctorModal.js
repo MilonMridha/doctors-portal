@@ -5,7 +5,7 @@ const DeleteDoctorModal = ({deletingDoctor, refetch, setDeletingDoctor}) => {
     const {name, email} = deletingDoctor;
 
     const handleDelete = () => {
-        const url = `http://localhost:5000/doctor/${email}`;
+        const url = `https://ancient-chamber-96068.herokuapp.com/doctor/${email}`;
         fetch(url, {
             method: 'DELETE',
             headers: {
@@ -16,7 +16,7 @@ const DeleteDoctorModal = ({deletingDoctor, refetch, setDeletingDoctor}) => {
                 console.log(data)
                 if (data.acknowledged === true) {
                     toast.success(`Doctor: ${name} is deleted`);
-                    setDeletingDoctor(null)
+                    setDeletingDoctor(null);
                     refetch();
                     
                 }
