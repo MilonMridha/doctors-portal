@@ -8,5 +8,5 @@
  * ...................................
  * 7 get credit card info/error *display card error(if any error)
  * 8 get client secret from backend via payment intent post api-----
- * 9 store client secreton the client side
+ * 9 store client secret on the client side
  * */

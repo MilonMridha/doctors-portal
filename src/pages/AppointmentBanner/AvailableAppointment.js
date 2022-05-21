@@ -13,19 +13,19 @@ const AvailableAppointment = ({date}) => {
 
     const formattedDate = format(date, 'PP');
 
-    const {data: services, isLoading, refetch } = useQuery(['available', formattedDate], ()=> fetch(`https://ancient-chamber-96068.herokuapp.com/available?date=${formattedDate}`)
+    const {data: services, isLoading, refetch } = useQuery(['available', formattedDate], ()=> fetch(`http://localhost:5000/available?date=${formattedDate}`)
         .then(res => res.json()) )
 
 if(isLoading){
     return <Loading></Loading>
 }
-    // useEffect(()=>{
-    //     fetch(`https://ancient-chamber-96068.herokuapp.com/available?date=${formattedDate}`)
-    //     .then(res => res.json())
-    //     .then(data => setServices(data))
-    // },[formattedDate])
+    
     return (
         <div>
+
+            {
+                !services.length && <Loading></Loading>
+            }
             <h4 className='text-xl text-secondary text-center'>Available Appointments on {format(date,'PP')}</h4>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-5 p-5'>
                 {
